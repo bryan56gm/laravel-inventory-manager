@@ -15,4 +15,5 @@ export default defineConfig({
     server: {
         cors: true,
     },
+    base: '/',  // Usar rutas relativas evita HTTP absoluto
 });
