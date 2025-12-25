@@ -1,0 +1,42 @@
+# Laravel & PHP
+/vendor
+/node_modules
+/public/build
+/public/hot
+/storage/*.key
+/storage/pail
+.env
+.env.backup
+.env.production
+.phpunit.cache
+.phpunit.result.cache
+.phpactor.json
+Homestead.json
+Homestead.yaml
+/auth.json
+
+# Laravel Logs & Caches
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/views/*
+/storage/framework/sessions/*
+
+# Node & npm
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# IDEs & Editors
+/.idea
+/.vscode
+/.zed
+/.fleet
+
+# Misc
+/public/storage
+/public/mix-manifest.json
+/public/hot
+/public/css/app.css
+/public/js/app.js
+/public/mix-manifest.json
