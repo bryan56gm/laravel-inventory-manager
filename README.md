@@ -144,4 +144,4 @@ base: '/',  // Usar rutas relativas evita HTTP absoluto, ayudando con los estilo
 - Para más información sobre Livewire y UI: [Final --> README_LIVEWIRE.md](README_LIVEWIRE.md)
 
 
-![Inventory Manager](https://raw.githubusercontent.com/bryan56gm/portfolio/refs/heads/main/preview.webp)
+![Inventory Manager](https://raw.githubusercontent.com/bryan56gm/laravel-inventory-manager/refs/heads/main/preview.webp)
