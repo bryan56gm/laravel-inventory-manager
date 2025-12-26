@@ -1,211 +1,147 @@
+# Inventory Manager (Laravel + Livewire)
 
-# Proyecto Web con Laravel + PostgreSQL
-
-Este proyecto es una aplicación web desarrollada con **Laravel** que implementa
-autenticación de usuarios, manejo de sesiones y operaciones CRUD sobre una base
-de datos relacional.  
-El objetivo principal del proyecto es demostrar un **flujo completo de desarrollo
-y despliegue a producción**, utilizando herramientas modernas y buenas prácticas.
-
-La aplicación está pensada como **prueba técnica / proyecto demostrativo** para
-entornos reales de producción.
+Esta aplicación web permite gestionar un inventario de productos y categorías, con operaciones completas de creación, edición, eliminación y consulta. Incluye autenticación de usuarios y una interfaz interactiva basada en Livewire y Flux UI para facilitar la gestión de datos de manera rápida y visual.
 
 ---
 
-## Descripción
+## 🧠 ¿Objetivos del proyecto?
 
-La aplicación permite a los usuarios:
-
-- **Registrarse**: Crear una cuenta con credenciales seguras.
-- **Iniciar sesión**: Acceder a la aplicación mediante autenticación.
-- **Cerrar sesión**: Finalizar la sesión de forma segura.
-- **Interactuar con la aplicación**: Operaciones CRUD según la lógica del proyecto.
-- **Persistir datos**: Toda la información se guarda en una base de datos PostgreSQL.
+- Autenticación de usuarios
+- Modelos y relaciones con Eloquent
+- CRUD completo de entidades
+- Componentes Livewire reactivos
+- UI moderna con Flux + Tailwind
+- Seeders con datos legibles (no lorem ipsum)
+- Despliegue en Railway con PostgreSQL
 
 ---
 
-## Tecnologías utilizadas
+## 🧱 Stack tecnológico
 
-- **Backend**: Laravel (PHP)
-- **Frontend**: Blade + Vite
+- **Backend**: Laravel 12 (PHP 8.2)
+- **Frontend**: Blade + Livewire 3
+- **UI**: Flux UI + Tailwind CSS
 - **Base de datos**: PostgreSQL
-- **ORM**: Eloquent (Laravel)
-- **Autenticación**: Sistema nativo de Laravel
-- **Despliegue**: Railway
-- **Control de versiones**: Git + GitHub
+- **ORM**: Eloquent
+- **Build**: Vite
+- **Deploy**: Railway
 
 ---
 
-## Base de Datos
-
-- **Desarrollo**: PostgreSQL  
-- **Producción**: PostgreSQL (Railway)
-
-La aplicación utiliza **Eloquent ORM**, lo que permite trabajar con PostgreSQL
-tanto en desarrollo como en producción sin modificar la lógica del código,
-únicamente cambiando las variables de entorno.
-
-> ⚠️ Se recomienda usar PostgreSQL también en desarrollo para evitar diferencias
-> de comportamiento entre entornos.
-
----
-
-## Requisitos
-
-Antes de comenzar, asegúrate de tener instalado:
-
-- PHP 8.2 o superior
-- Composer
-- Node.js 18 o superior
-- Git
-
----
-
-## Instalación y Ejecución (Desarrollo Local)
+## 🚀 Puesta en marcha (local)
 
 ### 1. Clonar el repositorio
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
-```
-
-### 2. Acceder al proyecto
-
-```bash
+git clone <url-del-repositorio>
 cd nombre-del-proyecto
 ```
 
-### 3. Instalar dependencias de PHP
-
+### 2. Instalar dependencias PHP
 ```bash
 composer install
 ```
 
-### 4. Instalar dependencias de frontend
-
+### 3. Instalar dependencias NodeJS y construir assets
 ```bash
 npm install
 npm run build
 ```
 
-### 5. Configurar variables de entorno
-
-Copia el archivo de ejemplo:
-
+### 4. Configurar variables de entorno
 ```bash
 cp .env.example .env
 ```
-
-Edita el archivo `.env` y configura PostgreSQL:
-
+Editar `.env` con datos de PostgreSQL:
 ```env
-APP_ENV=local
-APP_DEBUG=true
-APP_URL=http://localhost
-
+APP_ENV=local   <--------- OBLIGATORIO (solo en local)
+APP_KEY=BASE64:XXXXXXXX  <--------- PASO 5 (generar clave APP_KEY)
 DB_CONNECTION=pgsql
-DB_HOST=HOST_POSTGRES
-DB_PORT=5432
-DB_DATABASE=nombre_bd
-DB_USERNAME=usuario
-DB_PASSWORD=password
+DATABASE_URL=postgresql://usuario:password@host:puerto/base_de_datos
 ```
 
-### 6. Generar la clave de la aplicación
+Por qué es OBLIGATORIO en local
 
+Laravel asume production si APP_ENV no existe.
+Eso implica:
+
+- Se activan optimizaciones de producción
+- Se puede forzar HTTPS
+- Se cachea configuración
+- Se desactiva debug
+
+🆘 INFO exta para este caso concreto:
+
+- PHP Artisan serve NO soporta HTTPS
+- Resultado: Invalid request (Unsupported SSL request)
+- Forzar HTTPS en AppServiceProvider.php
+
+```php
+if (app()->environment('production')) {
+    URL::forceScheme('https');
+}
+```
+
+### 5. Generar APP_KEY
 ```bash
 php artisan key:generate
 ```
 
-### 7. Ejecutar migraciones
-
+### 6. Ejecutar migraciones y seeders
 ```bash
-php artisan migrate
+php artisan migrate --seed
 ```
+Con esto, se crearán las tablas de la base de datos (database/migraciones) y se cargarán los datos de prueba (database/seeders).
 
-### 8. Iniciar el servidor de desarrollo
-
+### 7. Levantar servidor de desarrollo
 ```bash
 php artisan serve
 ```
 
-La aplicación estará disponible en:
+La aplicación estará disponible en `http://127.0.0.1:8000`
 
-```
-http://127.0.0.1:8000
-```
 
----
-
-## Despliegue a Producción (Railway)
-
-### 1. Crear proyecto en Railway
-
-- Crear un nuevo proyecto.
-- Conectar el repositorio de GitHub.
-
-### 2. Crear base de datos PostgreSQL
-
-- Añadir un servicio **PostgreSQL** dentro del proyecto.
-- Railway generará automáticamente las credenciales.
-
-### 3. Configurar variables de entorno en Railway
-
+## 🌍 Producción (Railway – resumen)
 ```env
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://tu-app.up.railway.app
-
+APP_KEY=BASE64:XXXXXXXX
 DB_CONNECTION=pgsql
-DB_HOST=${{Postgres.PGHOST}}
-DB_PORT=${{Postgres.PGPORT}}
-DB_DATABASE=${{Postgres.PGDATABASE}}
-DB_USERNAME=${{Postgres.PGUSER}}
-DB_PASSWORD=${{Postgres.PGPASSWORD}}
-
-SESSION_DRIVER=database
-CACHE_DRIVER=database
-QUEUE_CONNECTION=database
+DATABASE_URL=postgresql://usuario:password@host:puerto/base_de_datos
 ```
 
-### 4. Configurar APP_KEY
-
-Generar la clave en local:
-
+Generar clave en local:
 ```bash
 php artisan key:generate --show
 ```
 
-Copiar el valor y añadirlo en Railway:
-
+Añadir en Railway:
 ```env
 APP_KEY=base64:XXXXXXXX
 ```
 
-### 5. Ejecutar comandos finales en producción
-
-Desde la consola de Railway:
-
+Generar clave en local:
 ```bash
 php artisan migrate --force
-php artisan storage:link
 php artisan config:cache
-php artisan route:cache
 ```
 
----
+#### 🆘 INFO exta para este caso concreto:
+Modificar config/database.php y añadir `url` a la conexión PostgreSQL:
+```php
+'pgsql' => [
+    'url' => env('DATABASE_URL'),
+]
+```
+Laravel prioriza `url`.
 
-## Estado del Proyecto
+Modificar y añadir a vite.config.js:
+```js
+base: '/',  // Usar rutas relativas evita HTTP absoluto, ayudando con los estilos en producción
+```
 
-- Aplicación funcional
-- Desplegada en producción
-- Base de datos real PostgreSQL
-- Autenticación y persistencia de datos
+📚 Documentación adicional:
 
-Este proyecto es ideal como **demo técnica** o **portfolio profesional**.
+- Para más información sobre la base de datos, migraciones y seeders: [Siguiente --> README_DB.md](README_DB.md)
+- Para más información sobre Livewire y UI: [Final --> README_LIVEWIRE.md](README_LIVEWIRE.md)
 
----
 
-## Capturas
-
-_Añade aquí imágenes o GIFs de la aplicación en funcionamiento._
+![Inventory Manager](https://raw.githubusercontent.com/bryan56gm/portfolio/refs/heads/main/preview.webp)
